@@ -11,3 +11,6 @@ venv/
 
 # VS Code settings
 .vscode/
+node_modules/
+build/
+.env
