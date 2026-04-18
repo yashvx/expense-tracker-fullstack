@@ -1,54 +1,63 @@
-# 💰 Expense Tracker (Python CLI Project)
+# 💰 Expense Tracker (MERN Stack)
 
-A command-line based Expense Tracker built using Python that allows users to manage and analyze their daily expenses efficiently.
-
----
+A full-stack expense tracking web application built using **React, Node.js, Express, and MongoDB**.
 
 ## 🚀 Features
 
-* Add new expenses with amount, category, and date
-* View all recorded expenses
-* Persistent data storage using JSON
-* Calculate total spending
-* Category-wise spending analysis
-* Filter expenses by category
-* Input validation for better user experience
-
----
+* Add, delete, and view expenses
+* Persistent data storage using MongoDB
+* Real-time UI updates with React
+* Category filtering
+* Dark Mode / Light Mode toggle
+* Modern UI with 3D card design and animations
 
 ## 🛠️ Tech Stack
 
-* Python
-* JSON (for data storage)
+* Frontend: React.js
+* Backend: Node.js, Express.js
+* Database: MongoDB
+* Styling: CSS (Neumorphism + Gradients)
 
----
-
-## ▶️ How to Run
-
-1. Clone the repository
-2. Navigate to the project folder
-3. Run the file:
-
-```bash
-python expense_tracker.py
-```
-
----
-
-## 📌 Future Improvements
-
-* Add GUI using Tkinter
-* Add graphs using Matplotlib
-* Monthly expense reports
-* Export to CSV
-
----
-
-## 📷 Sample Output
+## 📂 Project Structure
 
 ```
-[₹200] Food on 21-03-2026
-[₹500] Travel on 22-03-2026
+expense-tracker-fullstack/
+├── backend/
+├── frontend/
 ```
 
+## ⚙️ How to Run Locally
+
+### 1. Clone the repo
+
+```
+git clone <your-repo-link>
+```
+
+### 2. Backend setup
+
+```
+cd backend
+npm install
+node server.js
+```
+
+### 3. Frontend setup
+
+```
+cd frontend
+npm install
+npm start
+```
+
+## 💡 Future Improvements
+
+* Edit expenses feature
+* Authentication (login/signup)
+* Deployment (Vercel + Render)
+
 ---
+
+## 👨‍💻 Author
+
+Yash Dadhich
