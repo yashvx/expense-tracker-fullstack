@@ -1,3 +1,18 @@
+
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb://127.0.0.1:27017/expensesDB")
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.log(err));
+
+const expenseSchema = new mongoose.Schema({
+  amount: Number,
+  category: String,
+  date: String
+});
+
+const Expense = mongoose.model("Expense", expenseSchema);
+
 const express = require("express");
 const cors = require("cors");
 
@@ -7,28 +22,25 @@ const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 
-let expenses = [];
 
-app.get("/expenses", (req, res) => {
-    res.json(expenses);
+
+app.get("/expenses", async (req, res) => {
+  const expenses = await Expense.find();
+  res.json(expenses);
 });
 
-app.post("/expenses", (req, res) => {
-    const { amount, category, date } = req.body;
+app.post("/expenses", async (req, res) => {
+  const { amount, category, date } = req.body;
 
-    expenses.push({ amount, category, date });
+  const newExpense = new Expense({ amount, category, date });
+  await newExpense.save();
 
-    res.json({ message: "Expense added" });
+  res.json({ message: "Saved" });
 });
 
-app.delete("/expenses/:index", (req, res) => {
-    const index = req.params.index;
-
-    if (index >= 0 && index < expenses.length) {
-        expenses.splice(index, 1);
-    }
-
-    res.json({ message: "Deleted" });
+app.delete("/expenses/:id", async (req, res) => {
+  await Expense.findByIdAndDelete(req.params.id);
+  res.json({ message: "Deleted" });
 });
 
 app.listen(PORT, () => {

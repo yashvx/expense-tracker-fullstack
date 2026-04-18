@@ -1,3 +1,4 @@
+import "./App.css";
 import React, { useState, useEffect } from "react";
 
 function App() {
@@ -5,6 +6,8 @@ function App() {
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
   const [date, setDate] = useState("");
+  const [filter, setFilter] = useState("");
+  const [darkMode, setDarkMode] = useState(false);
 
   // Fetch expenses from backend
   useEffect(() => {
@@ -36,8 +39,8 @@ function App() {
     setDate("");
   };
 
-  const deleteExpense = async (index) => {
-  await fetch(`http://localhost:5000/expenses/${index}`, {
+  const deleteExpense = async (id) => {
+  await fetch(`http://localhost:5000/expenses/${id}`, {
     method: "DELETE"
   });
 
@@ -45,67 +48,84 @@ function App() {
   const data = await res.json();
   setExpenses(data);
 };
+  const fetchExpenses = async () => {
+    const res = await fetch("http://localhost:5000/expenses");
+  const data = await res.json();
+  setExpenses(data);
+  };
+
+  
+
 
   const total = expenses.reduce((sum, exp) => sum + Number(exp.amount), 0);
 
+  
+
+  const filteredExpenses = expenses.filter(exp =>
+  filter ? exp.category === filter : true
+);
+
   return (
-  <div style={{
-    maxWidth: "500px",
-    margin: "auto",
-    textAlign: "center",
-    fontFamily: "Arial"
-  }}>
-    <h1>💰 Expense Tracker</h1>
+  <div className={darkMode ? "dark" : "light"}>
+    <div className="container">
 
-    <form onSubmit={addExpense} style={{ marginBottom: "20px" }}>
-      <input
-        type="number"
-        placeholder="Amount"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        required
-      />
+      <button style={{ marginBottom: "15px" }} onClick={() => setDarkMode(!darkMode)}>
+        Toggle {darkMode ? "Light" : "Dark"} Mode
+      </button>
 
-      <input
-        type="text"
-        placeholder="Category"
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-        required
-      />
+      <h1>💰 Expense Tracker</h1>
 
-      <input
-        type="date"
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
-        required
-      />
+      <form onSubmit={addExpense}>
+        <input
+          type="number"
+          placeholder="Amount"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          required
+        />
 
-      <button type="submit">Add</button>
-    </form>
+        <input
+          type="text"
+          placeholder="Category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          required
+        />
 
-    <h2>Total: ₹{total}</h2>
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          required
+        />
 
-    <h2>Expenses</h2>
+        <button type="submit">Add Expense</button>
+      </form>
 
-    <ul style={{ listStyle: "none", padding: 0 }}>
-      {expenses.map((exp, index) => (
-        <li key={index} style={{
-          background: "#f4f4f4",
-          margin: "10px",
-          padding: "10px",
-          borderRadius: "8px"
-        }}>
-          ₹{exp.amount} - {exp.category} ({exp.date})
+      <h2>Total: ₹{total}</h2>
 
-          <br  />
+      <div>
+        {expenses.length === 0 ? (
+          <p>No expenses found</p>
+        ) : (
+          expenses.map((exp) => (
+            <div key={exp._id} className="card">
+              <div>
+                ₹{exp.amount} - {exp.category}
+                <br />
+                <small>{exp.date}</small>
+              </div>
 
-          <button onClick={() => deleteExpense(index)}>Delete</button>
-          
-        </li>
-      ))}
-    </ul>
+              <button onClick={() => deleteExpense(exp._id)}>
+                Delete
+              </button>
+            </div>
+          ))
+        )}
+      </div>
+
+    </div>
   </div>
-  )}
+)};
 
 export default App;
